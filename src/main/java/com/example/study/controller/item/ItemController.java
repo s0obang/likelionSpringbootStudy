@@ -1,9 +1,10 @@
 package com.example.study.controller.item;
 
 import com.example.study.entity.Item;
-import com.example.study.repository.BookRepository;
+import com.example.study.model.AddItemInput;
 import com.example.study.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.study.service.ItemService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +14,13 @@ import java.util.List;
 
 @RestController
 public class ItemController {
-    @Autowired
+    private ItemService itemService;
     private ItemRepository itemRepository;
+
+    public ItemController(ItemService itemService, ItemRepository itemRepository){
+        this.itemService=itemService;
+        this.itemRepository=itemRepository;
+    }
 
     @GetMapping("/items")
     public List<Item> getItems() {
@@ -23,10 +29,10 @@ public class ItemController {
     }
 
     @PostMapping("/items")
-    public void addItem(@RequestBody Item item) {
-        item.setId(null); // 이 줄을 추가해서 id 값을 null로 설정하여 새로운 id가 자동으로 생성되도록 함
-        //대신 id는 0으로 넣어야한다....알겠니
-        itemRepository.save(item);
+    public long addItem(@RequestBody @Valid AddItemInput input) {
+        long id = itemService.addItem(input);
+        return id;
+
     }
 
 }
