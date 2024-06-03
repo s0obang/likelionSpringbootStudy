@@ -28,7 +28,7 @@ public class Item {
     private String description;
 
     @Column(name="starting_price")
-    private String startingPrice;
+    private long startingPrice;
 
 
 }

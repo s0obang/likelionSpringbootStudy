@@ -6,10 +6,11 @@ import com.example.study.repository.BookRepository;
 import com.example.study.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,15 +23,29 @@ public class BookController {
         this.bookService = bookService;
         this.bookRepository = bookRepository;
     }
-
+/*
     @GetMapping("/book")
     public List<Book> getBooks(){
         List<Book> books =bookRepository.findAll();
         return books;
+    }*/
+    @GetMapping("/book")
+    public ResponseEntity<Page<Book>> getBooks(@PageableDefault Pageable pageable){
+        return ResponseEntity.ok(
+                bookService.getBooks(pageable)
+        );
+
     }
     @PostMapping("/book")
     public long addBook(@RequestBody @Valid AddBookInput input){
         long id = bookService.addBook(input);
         return id;
+    }
+    @PutMapping("/book/{id}")
+    public void updateBook(@PathVariable("id") long id,
+                           @RequestBody @Valid AddBookInput input
+    ){
+        bookService.upDateBook(id, input);
+
     }
 }

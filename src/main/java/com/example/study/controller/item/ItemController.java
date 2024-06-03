@@ -1,14 +1,12 @@
 package com.example.study.controller.item;
 
+import com.example.study.dto.Item.request.UpdateItemRequest;
 import com.example.study.entity.Item;
 import com.example.study.model.AddItemInput;
 import com.example.study.repository.ItemRepository;
 import com.example.study.service.ItemService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +31,12 @@ public class ItemController {
         long id = itemService.addItem(input);
         return id;
 
+    }
+
+    @PutMapping("/item/{id}")
+    public void updateBook(@PathVariable("id") long id,
+                           @RequestBody @Valid UpdateItemRequest updateItemRequest){
+        itemService.upDateItem(id, updateItemRequest);
     }
 
 }
